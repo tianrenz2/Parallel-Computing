@@ -23,6 +23,12 @@ void quickSort (int N, keytype* A);
  */
 void mySort (int N, keytype* A);
 
+void pMergeSort(keytype* A, int start1, int end1, keytype* B, int start2);
+
+void pMerge(keytype* A, int start1, int end1, int start2, int end2, keytype* T, int start3);
+
+int binarySearch(keytype target, keytype* A, int start, int end);
+
 /** Returns a new uninitialized array of length N */
 keytype* newKeys (int N);
 
