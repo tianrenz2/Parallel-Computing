@@ -29,6 +29,8 @@ void pMerge(keytype* A, int start1, int end1, int start2, int end2, keytype* T, 
 
 int binarySearch(keytype target, keytype* A, int start, int end);
 
+void swap(int *x, int *y);
+
 /** Returns a new uninitialized array of length N */
 keytype* newKeys (int N);
 
