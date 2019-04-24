@@ -79,7 +79,16 @@ int binarySearch(keytype target, keytype* A, int start, int end)
   target(or the first element smaller than target)
    in range(start, end) in array A,
   */
-  return 0;
+  if (start < end) {
+    int m = (start+end)/2;
+    if (A[m] == target) 
+      return m;
+    if (A[m] > target)
+      return binarySearch(target, A, start, m);
+    return binarySearch(target, A, m+1, end);
+  }
+
+  return start;
 }
 
 /* eof */
