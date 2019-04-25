@@ -17,6 +17,9 @@ default:
 mergesort-omp: driver.o sort.o mergesort-omp.o
 	$(CC) $(COPTFLAGS) -o $@ $^
 
+parallel: driver.o sort.o mergesort-omp.o
+	$(CC) $(COPTFLAGS) -fopenmp -o $@ $^
+
 %.o: %.cc
 	$(CC) $(CFLAGS) $(COPTFLAGS) -o $@ -c $<
 
