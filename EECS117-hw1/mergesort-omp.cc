@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
+#include <iostream>
 
 #include "sort.hh"
 
@@ -24,17 +26,25 @@ void pMergeSort(keytype* A, int start1, int end1, keytype* B, int start2)
   Todo: This function takes a part(start1, end1) of array A, keep
   splitting the partitions until the base case(size of the partition is 1)
   */
+
   int l = end1 - start1 + 1;
+
+    std::cout << "We here" << std::endl;
   if (l == 1)
     B[start2] = A[start1];
   else{
     keytype* T;
+    
     int mid1 = (start1 + end1) / 2;
     int l_mid = mid1 - start1 + 1;
+    
+    #pragma omp parallel 
+    {
     pMergeSort(A, start1, mid1, T, 1);
+    }
     pMergeSort(A, mid1 + 1, end1, T, l_mid + 1);
-
     pMerge(T, 1, l_mid, l_mid + 1, l, B, start2);
+    
   }
 
   return;
@@ -47,6 +57,7 @@ void pMerge(keytype* A, int start1, int end1, int start2, int end2, keytype* T, 
   */
   int l1 = end1 - start1 + 1;
   int l2 = end2 - start2 + 1;
+  
   if(l1 < l2){
     swap(&l1, &l2);
     swap(&start1, &start2);
@@ -55,6 +66,7 @@ void pMerge(keytype* A, int start1, int end1, int start2, int end2, keytype* T, 
   if(l1 == 0)
     return;
   else{
+    
     int mid1 = (start1 + end1) / 2;
     int mid2 = binarySearch(A[mid1], A, start2, end2);
     int mid3 = start3 + (mid1 - start1) + (mid2 - start2);
