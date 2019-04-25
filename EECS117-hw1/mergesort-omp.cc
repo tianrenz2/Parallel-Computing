@@ -12,11 +12,13 @@
 
 #include "sort.hh"
 
+static keytype* B;
 void
 mySort (int N, keytype* A)
 {
   /* Lucky you, you get to start from scratch */
-  keytype* B;
+  //keytype* B = newKeys(N);
+  assert(B!=NULL);
   pMergeSort(A, 0, N - 1, B, 0);
 }
 
@@ -26,12 +28,12 @@ void pMergeSort(keytype* A, int start1, int end1, keytype* B, int start2)
   Todo: This function takes a part(start1, end1) of array A, keep
   splitting the partitions until the base case(size of the partition is 1)
   */
-
+  assert(B != NULL);
   int l = end1 - start1 + 1;
 
-    std::cout << "We here" << std::endl;
-  if (l == 1)
+  if (l == 1) {
     B[start2] = A[start1];
+  }
   else{
     keytype* T;
     
@@ -40,6 +42,7 @@ void pMergeSort(keytype* A, int start1, int end1, keytype* B, int start2)
     
     #pragma omp parallel 
     {
+    std::cout << "able to do the parallel mergesort" << std::endl;
     pMergeSort(A, start1, mid1, T, 1);
     }
     pMergeSort(A, mid1 + 1, end1, T, l_mid + 1);
@@ -57,7 +60,7 @@ void pMerge(keytype* A, int start1, int end1, int start2, int end2, keytype* T, 
   */
   int l1 = end1 - start1 + 1;
   int l2 = end2 - start2 + 1;
-  
+ 
   if(l1 < l2){
     swap(&l1, &l2);
     swap(&start1, &start2);
@@ -91,6 +94,9 @@ int binarySearch(keytype target, keytype* A, int start, int end)
   target(or the first element smaller than target)
    in range(start, end) in array A,
   */
+
+  std::cout << "start: " << start << std::endl;
+  std::cout << "end: " << end << std::endl;
   if (start < end) {
     int m = (start+end)/2;
     if (A[m] == target) 
@@ -100,7 +106,7 @@ int binarySearch(keytype target, keytype* A, int start, int end)
     return binarySearch(target, A, m+1, end);
   }
 
-  return start;
+  return std::min(start, end);
 }
 
 /* eof */
