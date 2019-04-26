@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #include <omp.h>
+#include <omp.h>
 #include <iostream>
 #include <math.h>
 #include "sort.hh"
@@ -17,17 +17,10 @@ void
 mySort (int N, keytype* A)
 {
   /* Lucky you, you get to start from scratch */
-  keytype *B = newKeys(N);
-
+  keytype *B = A;
+  // omp_set_num_threads (16);
   // keytype C1[8] = {3, 8, 74 , 2, 9, 5,3};
-  pMergeSort(A, 0, N - 1, B, 0);
-  // sMerge(B, 0, C1, 0, 3, 4, 7);
-
-  for (int i = 0; i < N; i++) {
-    /* code */
-    A[i] = B[i];
-    // cout<<B[i]<<", ";
-  }
+  pMergeSort(B, 0, N - 1, A, 0);
   // std::copy(numbers, numbers + 5, values);
 
 }
@@ -52,13 +45,23 @@ void pMergeSort(keytype* A, int start1, int end1, keytype* B, int start2)
     int mid1 = (start1 + end1) / 2;
     int l_mid = mid1 - start1;
 
-    pMergeSort(A, start1, mid1, T, 0);
-    pMergeSort(A, mid1 + 1, end1, T, l_mid + 1);
-
-    if(l < 1000)
-      pMerge(T, 0, l_mid, l_mid + 1, l - 1, B, start2);
-    else{
-      sMerge(B, start2, T, 0, l_mid, l_mid + 1, l - 1);
+    if(l > 10000){
+      #pragma omp parallel
+      {
+      pMergeSort(A, start1, mid1, T, 0);
+      }
+      #pragma omp parallel
+      {
+      pMergeSort(A, mid1 + 1, end1, T, l_mid + 1);
+      }
+    }else{
+        pMergeSort(A, start1, mid1, T, 0);
+        pMergeSort(A, mid1 + 1, end1, T, l_mid + 1);
+    }
+    if(l > 1000){
+        pMerge(T, 0, l_mid, l_mid + 1, l - 1, B, start2);
+    }else{
+        sMerge(B, start2, T, 0, l_mid, l_mid + 1, l - 1);
     }
 
   }
@@ -88,13 +91,14 @@ void pMerge(keytype* T, int start1, int end1, int start2, int end2, keytype* A, 
     int mid2 = binarySearch(T[mid1], T, start2, end2);
     int mid3 = start3 + (mid1 - start1) + (mid2 - start2);
     A[mid3] = T[mid1];
-    #pragma omp parallel{
-      pMerge(T, start1, mid1 - 1, start2, mid2 - 1, A, start3);
+    #pragma omp parallel
+    {
+    pMerge(T, start1, mid1 - 1, start2, mid2 - 1, A, start3);
     }
-    #pragma omp parallel{
-      pMerge(T, mid1 + 1, end1, mid2, end2, A, mid3 + 1);
+    #pragma omp parallel
+    {
+    pMerge(T, mid1 + 1, end1, mid2, end2, A, mid3 + 1);
     }
-
   }
   return;
 }
