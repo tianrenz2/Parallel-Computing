@@ -27,6 +27,8 @@ void pMergeSort(keytype* A, int start1, int end1, keytype* B, int start2);
 
 void pMerge(keytype* A, int start1, int end1, int start2, int end2, keytype* T, int start3);
 
+void sMerge(keytype *A, int a_start, keytype *B, int l_start, int l_end, int r_start, int r_end);
+
 int binarySearch(keytype target, keytype* A, int start, int end);
 
 void swap(int *x, int *y);
