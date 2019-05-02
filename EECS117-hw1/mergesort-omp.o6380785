@@ -1,0 +1,11 @@
+Timer: gettimeofday
+Timer resolution: ~ 1 us (?)
+
+N == 100000
+
+Quicksort: 0.015804 seconds ==> 6.32751 million keys per second
+	(Array is sorted.)
+My sort: 0.548365 seconds ==> 0.18236 million keys per second
+	(Array is sorted.)
+	(Arrays are equal.)
+
