@@ -1,11 +1,12 @@
 /**
- *  \file mandelbrot_serial.cc
- *  \brief HW 2: Mandelbrot set serial code
+ *  \file mandelbrot_susie.cc
+ *  \brief HW 2: Mandelbrot set Susie code
  */
 
 
 #include <iostream>
 #include <cstdlib>
+#include <mpi.h>
 
 #include "render.hh"
 
@@ -33,6 +34,12 @@ mandelbrot(double x, double y) {
 
 int
 main(int argc, char* argv[]) {
+  //Initilize MPI environment
+  MPI_Init(NULL, NULL);
+  int world_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+  int world_size;
+  
   double minX = -2.1;
   double maxX = 0.7;
   double minY = -1.25;
@@ -57,6 +64,15 @@ main(int argc, char* argv[]) {
   gil::rgb8_image_t img(height, width);
   auto img_view = gil::view(img);
 
+  if (world_rank == 0) 
+  {
+    // Master code
+    // MPI_Recv data from other ranks
+  } else {
+    // Slave code
+    // MPI_Send the modifications from running mandelbrot
+    // Divide tasks as states in hw
+  } 
   y = minY;
   for (int i = 0; i < height; ++i) {
     x = minX;
@@ -66,7 +82,7 @@ main(int argc, char* argv[]) {
     }
     y += it;
   }
-  gil::png_write_view("mandelbrot.png", const_view(img));
+  gil::png_write_view("mandelbrot_susie.png", const_view(img));
 }
 
 /* eof */
