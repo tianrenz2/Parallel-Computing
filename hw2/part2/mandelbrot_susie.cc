@@ -35,11 +35,11 @@ mandelbrot(double x, double y) {
 int
 main(int argc, char* argv[]) {
   //Initilize MPI environment
+  int world_rank, world_size;
   MPI_Init(NULL, NULL);
-  int world_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-  int world_size;
-  
+  MPI_Comm_size(MPI_COMM_WORLD, &world_size); // # of processes 
+
   double minX = -2.1;
   double maxX = 0.7;
   double minY = -1.25;
@@ -56,6 +56,9 @@ main(int argc, char* argv[]) {
     return -1;
   }
 
+  int chunk_size = height / world_size;
+  double send[chunk_size];
+
   double it = (maxY - minY)/height;
   double jt = (maxX - minX)/width;
   double x, y;
@@ -67,21 +70,23 @@ main(int argc, char* argv[]) {
   if (world_rank == 0) 
   {
     // Master code
-    // MPI_Recv data from other ranks
+    MPI_Gather( send, width*height, MPI_INT, NULL, chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
   } else {
     // Slave code
-    // MPI_Send the modifications from running mandelbrot
-    // Divide tasks as states in hw
+      y = minY;
+      for (int i = 0; i < height; ++i) {
+        x = minX;
+        for (int j = 0; j < width; ++j) {
+          img_view(j, world_rank*i) = render(mandelbrot(x, y)/512.0);
+          x += jt;
+        }
+        y += it;
+      }
+
   } 
-  y = minY;
-  for (int i = 0; i < height; ++i) {
-    x = minX;
-    for (int j = 0; j < width; ++j) {
-      img_view(j, i) = render(mandelbrot(x, y)/512.0);
-      x += jt;
-    }
-    y += it;
-  }
+
+
+
   gil::png_write_view("mandelbrot_susie.png", const_view(img));
 }
 
