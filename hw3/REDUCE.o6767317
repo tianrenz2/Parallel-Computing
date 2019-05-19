@@ -1,0 +1,47 @@
+Script began: Fri May 17 12:50:53 PDT 2019
+Node: compute-1-14.local
+Current directory: /data/users/ayee5/Parallel-Computing/hw3
+
+=== Running 5 trials of naive ... ===
+*** Trial 1 ***
+N: 8388608
+Timer: gettimeofday
+Timer resolution: ~ 1 us (?)
+Time to execute naive GPU reduction kernel: 0.003347 secs
+Effective bandwidth: 10.03 GB/s
+Time to execute naive CPU reduction: 0.109976 secs
+SUCCESS: GPU: 41.928440 	CPU: 41.928440
+*** Trial 2 ***
+N: 8388608
+Timer: gettimeofday
+Timer resolution: ~ 1 us (?)
+Time to execute naive GPU reduction kernel: 0.003351 secs
+Effective bandwidth: 10.01 GB/s
+Time to execute naive CPU reduction: 0.109969 secs
+SUCCESS: GPU: 41.940529 	CPU: 41.940529
+*** Trial 3 ***
+N: 8388608
+Timer: gettimeofday
+Timer resolution: ~ 1 us (?)
+Time to execute naive GPU reduction kernel: 0.00335 secs
+Effective bandwidth: 10.02 GB/s
+Time to execute naive CPU reduction: 0.10998 secs
+SUCCESS: GPU: 41.946812 	CPU: 41.946812
+*** Trial 4 ***
+N: 8388608
+Timer: gettimeofday
+Timer resolution: ~ 1 us (?)
+Time to execute naive GPU reduction kernel: 0.003351 secs
+Effective bandwidth: 10.01 GB/s
+Time to execute naive CPU reduction: 0.109962 secs
+SUCCESS: GPU: 41.921162 	CPU: 41.921162
+*** Trial 5 ***
+N: 8388608
+Timer: gettimeofday
+Timer resolution: ~ 1 us (?)
+Time to execute naive GPU reduction kernel: 0.003347 secs
+Effective bandwidth: 10.03 GB/s
+Time to execute naive CPU reduction: 0.109988 secs
+SUCCESS: GPU: 41.951866 	CPU: 41.951866
+
+=== Done! ===
